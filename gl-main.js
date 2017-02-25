@@ -59,7 +59,9 @@ function main() {
     );
     gl.uniformMatrix4fv(modelUnif, false, ringCF);
 
-    obj = new Grapes(gl);
+    //obj = new Grapes(gl);
+
+      obj = new Pineapple(gl);
     globalAxes = new Axes(gl);
     mat4.rotateX(ringCF, ringCF, -Math.PI/2);
     coneSpinAngle = 0;
@@ -128,7 +130,9 @@ function render() {
 
 function drawScene() {
   globalAxes.draw(posAttr, colAttr, modelUnif, IDENTITY);
+  obj.draw(posAttr, colAttr, modelUnif, tmpMat);
 
+  /*
   if (typeof obj !== 'undefined') {
     var yPos = -0.5;
     for (let k = 0; k < 3; k++) {
@@ -138,6 +142,7 @@ function drawScene() {
       yPos += 0.5;
     }
   }
+  */
 }
 
 function draw3D() {

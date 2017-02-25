@@ -3,12 +3,12 @@
  */
 class Grapes {
   constructor (gl) {
-    this.grape = new Sphere(gl, 0.5, 0.12, 16, 16);
+    this.grape = new Sphere(gl, 0.1, 16, 16);
    // this.crown = new Torus(gl, 0.15, 0.05, 30, 10);
    // this.gem = new Cube(gl, 0.15, 2);
 
     this.grapeTransform = mat4.create();
-    mat4.rotateX(this.grapeTransform, this.grapeTransform, Math.PI/2);
+    //mat4.rotateX(this.grapeTransform, this.grapeTransform, Math.PI/2);
    // let moveUp = vec3.fromValues (0, 0, 1.0);
    // this.crownTransform = mat4.create();
    // mat4.translate (this.crownTransform, this.crownTransform, moveUp);
