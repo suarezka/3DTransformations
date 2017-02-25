@@ -6,23 +6,34 @@
  */
 class Pineapple {
     constructor (gl) {
-        this.base = new Cylinder(gl, 0.28, 0.23, 0.4, 16, 1);
-        this.top = new Cylinder(gl, 0.23, 0.28, 0.4, 16, 1);
-        this.crown = new Cone(gl, 0.2, 0.4, 12, 1);
-        this.c2 = new Cone(gl, 0.2, 0.4, 12, 1);
-        this.c3 = new Cone(gl, 0.2, 0.4, 12, 1);
+        //Yellow
+        let baseColor = vec3.fromValues(1.0, 1.0, 0.0);
+        let crownColor = vec3.fromValues(0.0, 1.0, 0.0);
+        let crownColor2 = vec3.fromValues(0.0, 0.392157, 0.0);
+        let baseColor2 = vec3.fromValues(0.803922, 0.521569, 0.247059);
+
+        this.base = new Cylinder(gl, 0.28, 0.25, 0.4, 16, 1, baseColor, baseColor2);
+        this.top = new Cylinder(gl, 0.28, 0.25, 0.4, 16, 1, baseColor, baseColor2);
+        this.crown = new Cone(gl, 0.2, 0.4, 12, 1, crownColor, crownColor2);
+        this.c2 = new Cone(gl, 0.2, 0.4, 12, 1, crownColor, crownColor2);
+        this.c3 = new Cone(gl, 0.2, 0.4, 12, 1, crownColor, crownColor2);
 
         //Repositioning for Base and Top
         this.baseTransform = mat4.create();
-        let moveUp = vec3.fromValues (0, 0, 0.4);
+
+        let moveUp = vec3.fromValues (0, 0, 0.8);
         this.topTransform = mat4.create();
-        mat4.translate (this.topTransform, this.topTransform, moveUp);
+        mat4.rotateY(this.topTransform, this.topTransform, Math.PI);
+        let moveUpTop = mat4.fromTranslation(mat4.create(), moveUp);
+        //crownTransform = moveUpCrown * crownTransform
+        mat4.multiply (this.topTransform, moveUpTop, this.topTransform);
+
 
         //Repositioning Crown of Cones
         this.crownTransform = mat4.create();
         mat4.rotateY(this.crownTransform, this.crownTransform, Math.PI);
 
-        let moveUp2 = vec3.fromValues(0, 0, 1.0);
+        let moveUp2 = vec3.fromValues(0, 0, 0.95);
         let moveUpCrown = mat4.fromTranslation(mat4.create(), moveUp2);
 
         //crownTransform = moveUpCrown * crownTransform
@@ -33,7 +44,7 @@ class Pineapple {
         this.c2Transform = mat4.create();
         mat4.rotateY(this.c2Transform, this.c2Transform, Math.PI);
 
-        let moveUp3 = vec3.fromValues(0, 0, 1.15);
+        let moveUp3 = vec3.fromValues(0, 0, 1.1);
         let moveUpC2 = mat4.fromTranslation(mat4.create(), moveUp3);
 
         //crownTransform = moveUpCrown * crownTransform
