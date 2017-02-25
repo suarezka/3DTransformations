@@ -59,7 +59,7 @@ function main() {
     );
     gl.uniformMatrix4fv(modelUnif, false, ringCF);
 
-    obj = new DiamondRing(gl);
+   // obj = new DiamondRing(gl);
     globalAxes = new Axes(gl);
     //mat4.rotateX(ringCF, ringCF, -Math.PI/2);
     coneSpinAngle = 0;
