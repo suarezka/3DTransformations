@@ -3,7 +3,11 @@
  */
 class Grapes {
   constructor (gl) {
-    this.grape = new Sphere(gl, 0.1, 16, 16);
+
+    //Purple
+      let grapeColor = vec3.fromValues(0.627451, 0.12549, 0.941176);
+
+    this.grape = new Sphere(gl, 0.1, 16, 16, grapeColor, grapeColor);
    // this.crown = new Torus(gl, 0.15, 0.05, 30, 10);
    // this.gem = new Cube(gl, 0.15, 2);
 

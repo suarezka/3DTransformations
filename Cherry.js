@@ -1,10 +1,10 @@
 /**
- * Created by kaye on 2/25/17.
+ * Created by Kaye on 2/25/17.
  */
 /**
  * Created by Hans Dulimarta on 2/16/17.
  */
-class Pineapple {
+class Cherry {
     constructor (gl) {
         //Yellow + Brownish
         let baseColor = vec3.fromValues(1.0, 1.0, 0.0);
@@ -15,12 +15,14 @@ class Pineapple {
         let crownColor2 = vec3.fromValues(0.0, 0.392157, 0.0);
 
 
-        this.base = new Cylinder(gl, 0.28, 0.25, 0.4, 16, 1, baseColor, baseColor2);
-        this.top = new Cylinder(gl, 0.28, 0.25, 0.4, 16, 1, baseColor, baseColor2);
-        this.crown = new Cone(gl, 0.2, 0.4, 15, 1, crownColor, crownColor2);
-        this.c2 = new Cone(gl, 0.2, 0.4, 15, 1, crownColor, crownColor2);
-        this.c3 = new Cone(gl, 0.2, 0.4, 15, 1, crownColor, crownColor2);
+        this.stem1 = new Cylinder(gl, 0.02, 0.02, 0.6, 12, 1, baseColor, baseColor2);
+        //this.stem2 = new Cylinder(gl, 0.28, 0.25, 0.4, 16, 1, baseColor, baseColor2);
+       // this.crown = new Cone(gl, 0.2, 0.4, 15, 1, crownColor, crownColor2);
+       // this.c2 = new Cone(gl, 0.2, 0.4, 15, 1, crownColor, crownColor2);
+        //this.c3 = new Cone(gl, 0.2, 0.4, 15, 1, crownColor, crownColor2);
 
+        this.stem1Transform = mat4.create();
+/*
         //Repositioning for Base and Top
         this.baseTransform = mat4.create();
 
@@ -65,15 +67,15 @@ class Pineapple {
         mat4.multiply (this.c3Transform, moveUpC3, this.c3Transform);
 
 
-
+*/
 
         this.tmp = mat4.create();
     }
 
     draw (vertexAttr, colorAttr, modelUniform, coordFrame) {
         mat4.mul (this.tmp, coordFrame, this.baseTransform);
-        this.base.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
-
+        this.stem1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
+/*
         mat4.mul (this.tmp, coordFrame, this.topTransform);
         this.top.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
@@ -85,7 +87,7 @@ class Pineapple {
 
         mat4.mul (this.tmp, coordFrame, this.c3Transform);
         this.c3.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
-
+*/
 
     }
 }
