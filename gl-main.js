@@ -59,8 +59,8 @@ function main() {
     );
     gl.uniformMatrix4fv(modelUnif, false, ringCF);
 
-      //obj = new Pineapple(gl);
-      obj2 = new Cherry();
+      obj = new Pineapple(gl);
+      //obj2 = new Cherry();
     globalAxes = new Axes(gl);
     mat4.rotateX(ringCF, ringCF, -Math.PI/2);
     coneSpinAngle = 0;
@@ -129,8 +129,8 @@ function render() {
 
 function drawScene() {
   globalAxes.draw(posAttr, colAttr, modelUnif, IDENTITY);
- // obj.draw(posAttr, colAttr, modelUnif, tmpMat);
-  obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
+  obj.draw(posAttr, colAttr, modelUnif, tmpMat);
+ // obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
 
   /*
   if (typeof obj !== 'undefined') {

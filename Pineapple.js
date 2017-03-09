@@ -15,11 +15,24 @@ class Pineapple {
         let crownColor2 = vec3.fromValues(0.0, 0.392157, 0.0);
 
 
-        this.base = new Cylinder(gl, 0.28, 0.25, 0.4, 16, 1, baseColor, baseColor2);
-        this.top = new Cylinder(gl, 0.28, 0.25, 0.4, 16, 1, baseColor, baseColor2);
+        this.base = new Cylinder(gl, 0.30, 0.25, 0.4, 16, 1, baseColor, baseColor2);
+        this.top = new Cylinder(gl, 0.30, 0.25, 0.4, 16, 1, baseColor, baseColor2);
         this.crown = new Cone(gl, 0.2, 0.4, 15, 1, crownColor, crownColor2);
         this.c2 = new Cone(gl, 0.2, 0.4, 15, 1, crownColor, crownColor2);
         this.c3 = new Cone(gl, 0.2, 0.4, 15, 1, crownColor, crownColor2);
+        this.sideCones = [
+            new Cone(gl, 0.1, 0.4, 15, 1),
+            new Cone(gl, 0.1, 0.4, 15, 1),
+            new Cone(gl, 0.1, 0.4, 15, 1),
+        ];
+
+        //Side Cones
+        let move = vec3.fromValues (0, 0, 0.2);
+        this.sideConesTransfrom = mat4.create();
+        mat4.rotateY(this.sideConesTransfrom, this.sideConesTransfrom, Math.PI / 2);
+        let moveSide = mat4.fromTranslation(mat4.create(), move);
+        mat4.multiply(this.sideConesTransfrom, moveSide, this.sideConesTransfrom);
+
 
         //Repositioning for Base and Top
         this.baseTransform = mat4.create();
@@ -73,6 +86,13 @@ class Pineapple {
     draw (vertexAttr, colorAttr, modelUniform, coordFrame) {
         mat4.mul (this.tmp, coordFrame, this.baseTransform);
         this.base.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
+
+
+        for (let k = 0; k < 3; k++) {
+            mat4.mul (this.tmp, coordFrame, this.sideConesTransfrom);
+            this.sideCones[k].draw(vertexAttr, colorAttr, modelUniform, this.tmp);
+
+        }
 
         mat4.mul (this.tmp, coordFrame, this.topTransform);
         this.top.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
