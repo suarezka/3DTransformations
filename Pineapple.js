@@ -14,24 +14,20 @@ class Pineapple {
         let crownColor = vec3.fromValues(0.0, 1.0, 0.0);
         let crownColor2 = vec3.fromValues(0.0, 0.392157, 0.0);
 
+        //Pipe Color
+        let pipeColor = vec3.fromValues(0.117647, 0.564706, 1);
+        let windowColor = vec3.fromValues(0.529412, 0.807843, 0.980392);
+
 
         this.base = new Cylinder(gl, 0.20, 0.15, 0.2, 16, baseColor, baseColor2);
         this.top = new Cylinder(gl, 0.20, 0.15, 0.2, 16, baseColor, baseColor2);
         this.c1 = new Cone(gl, 0.12, 0.2, 15, 1, crownColor, crownColor2);
         this.c2 = new Cone(gl, 0.11, 0.2, 15, 1, crownColor, crownColor2);
         this.c3 = new Cone(gl, 0.1, 0.2, 15, 1, crownColor, crownColor2);
-        this.sideCones = [
-            new Cone(gl, 0.1, 0.4, 15, 1),
-            new Cone(gl, 0.1, 0.4, 15, 1),
-            new Cone(gl, 0.1, 0.4, 15, 1),
-        ];
-
-        //Side Cones
-        let move = vec3.fromValues (0, 0, 0.2);
-        this.sideConesTransfrom = mat4.create();
-        mat4.rotateY(this.sideConesTransfrom, this.sideConesTransfrom, Math.PI / 2);
-        let moveSide = mat4.fromTranslation(mat4.create(), move);
-        mat4.multiply(this.sideConesTransfrom, moveSide, this.sideConesTransfrom);
+        this.pipe1 = new Cylinder(gl, 0.01, 0.01, 0.2, 15, pipeColor, pipeColor);
+        this.pipe2 = new Cylinder(gl, 0.05, 0.01, 0.1, 15, pipeColor, pipeColor);
+        this.window1 = new Cylinder(gl, 0.06, 0.06, 0.04, 15, pipeColor, windowColor);
+        this.window2 = new Cylinder(gl, 0.06, 0.06, 0.04, 15, pipeColor, windowColor);
 
 
         //Repositioning for Base and Top
@@ -44,6 +40,27 @@ class Pineapple {
         //crownTransform = moveUpCrown * crownTransform
         mat4.multiply (this.topTransform, moveUpTop, this.topTransform);
 
+        //Side Pipe
+        let move = vec3.fromValues (0, 0.15, 0.24);
+        this.pipe1Transform = mat4.create();
+        mat4.rotateX(this.pipe1Transform, this.pipe1Transform, Math.PI / 2);
+        let moveSide = mat4.fromTranslation(mat4.create(), move);
+        mat4.multiply(this.pipe1Transform, moveSide, this.pipe1Transform);
+
+        this.pipe2Transform = mat4.create();
+        mat4.fromTranslation(this.pipe2Transform, vec3.fromValues(0, 0.23, 0.28));
+
+        //Windows
+        this.window1Transform = mat4.create();
+        mat4.rotateY(this.window1Transform, this.window1Transform, Math.PI / 3);
+        let moveWindow = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.15, -0.1, 0.2));
+        mat4.multiply(this.window1Transform, moveWindow, this.window1Transform);
+
+        this.window2Transform = mat4.create();
+        mat4.rotateY(this.window2Transform, this.window2Transform, Math.PI / 2);
+        //mat4.rotateX(this.window2Transform, this.window2Transform, - Math.PI / 2);
+        let moveWindow2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.15, 0.1, 0));
+        mat4.multiply(this.window2Transform, moveWindow2, this.window2Transform);
 
         //Repositioning C1 of Cones
         this.c1Transform = mat4.create();
@@ -87,15 +104,20 @@ class Pineapple {
         mat4.mul (this.tmp, coordFrame, this.baseTransform);
         this.base.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
-/*
-        for (let k = 0; k < 3; k++) {
-            mat4.mul (this.tmp, coordFrame, this.sideConesTransfrom);
-            this.sideCones[k].draw(vertexAttr, colorAttr, modelUniform, this.tmp);
-
-        }
-*/
         mat4.mul (this.tmp, coordFrame, this.topTransform);
         this.top.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
+
+        mat4.mul (this.tmp, coordFrame, this.pipe1Transform);
+        this.pipe1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
+
+        mat4.mul (this.tmp, coordFrame, this.pipe2Transform);
+        this.pipe2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
+
+        mat4.mul (this.tmp, coordFrame, this.window1Transform);
+        this.window1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
+
+        mat4.mul (this.tmp, coordFrame, this.window2Transform);
+        this.window2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.c1Transform);
         this.c1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
