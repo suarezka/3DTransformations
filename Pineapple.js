@@ -26,8 +26,8 @@ class Pineapple {
         this.c3 = new Cone(gl, 0.1, 0.2, 15, 1, crownColor, crownColor2);
         this.pipe1 = new Cylinder(gl, 0.01, 0.01, 0.2, 15, pipeColor, pipeColor);
         this.pipe2 = new Cylinder(gl, 0.05, 0.01, 0.1, 15, pipeColor, pipeColor);
-        this.window1 = new Cylinder(gl, 0.06, 0.06, 0.04, 15, pipeColor, windowColor);
-        this.window2 = new Cylinder(gl, 0.06, 0.06, 0.04, 15, pipeColor, windowColor);
+        this.window1 = new Torus(gl, 0.04, 0.02, 10, 10, pipeColor, windowColor);
+        this.window2 = new Torus(gl, 0.035, 0.02, 10, 10, pipeColor, windowColor);
 
 
         //Repositioning for Base and Top
@@ -53,13 +53,13 @@ class Pineapple {
         //Windows
         this.window1Transform = mat4.create();
         mat4.rotateY(this.window1Transform, this.window1Transform, Math.PI / 3);
-        let moveWindow = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.15, -0.1, 0.2));
+        let moveWindow = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.15, -0.07, 0.24));
         mat4.multiply(this.window1Transform, moveWindow, this.window1Transform);
 
         this.window2Transform = mat4.create();
-        mat4.rotateY(this.window2Transform, this.window2Transform, Math.PI / 2);
-        //mat4.rotateX(this.window2Transform, this.window2Transform, - Math.PI / 2);
-        let moveWindow2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.15, 0.1, 0));
+        mat4.rotateY(this.window2Transform, this.window2Transform, Math.PI / 3);
+       // mat4.rotateZ(this.window2Transform, this.window2Transform, Math.PI);
+        let moveWindow2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.18, 0.07, 0.04));
         mat4.multiply(this.window2Transform, moveWindow2, this.window2Transform);
 
         //Repositioning C1 of Cones
