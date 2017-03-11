@@ -30,10 +30,15 @@
 <body onload="main()">
 
 <select id="menu">
-  <option value="0">Spongebob's House</option>
-  <option value="1">Squidward's House</option>
-  <option value="2">Patrick's House</option>
+  <option id="house0" value="0">Spongebob's House</option>
+  <option id="house1" value="1">Squidward's House</option>
+  <option id="house2" value="2">Patrick's House</option>
 </select>
+
+<label>
+    Number of Rows: 1 <input id="house-row" type="range" min="1" max="3" step="1" value="1"> 3
+    Number of Houses: 1 <input id="house-number" type="range" min="1" max="10" step="1" value="1"> 10
+</label>
 
 <canvas id="gl-canvas"></canvas>
   <div id="msg" style="text-align: center; font-size: 18pt"></div>

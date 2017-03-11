@@ -5,8 +5,11 @@
 var gl;
 var glCanvas, textOut;
 var orthoProjMat, persProjMat, viewMat, topViewMat, ringCF;
+var pineappleCF, statueCF, rockCF;
 var axisBuff, tmpMat;
 var globalAxes;
+var currSelection = 0;
+var currObjName;
 
 /* Vertex shader attribute variables */
 var posAttr, colAttr;
@@ -27,6 +30,9 @@ function main() {
     gl.bindBuffer(gl.ARRAY_BUFFER, axisBuff);
     window.addEventListener("resize", resizeHandler, false);
     window.addEventListener("keypress", keyboardHandler, false);
+    let menu = document.getElementById("menu");
+    menu.addEventListener("change", menuSelected);
+
     ShaderUtils.loadFromFile(gl, "vshader.glsl", "fshader.glsl")
         .then(prog => {
             shaderProg = prog;
@@ -50,6 +56,8 @@ function main() {
             sideViewMat = mat4.create();
             ringCF = mat4.create();
             pineappleCF = mat4.create();
+            statueCF = mat4.create();
+            rockCF = mat4.create();
             tmpMat = mat4.create();
             mat4.lookAt(viewMat,
                 vec3.fromValues(2, 2, 2), /* eye */
@@ -66,6 +74,8 @@ function main() {
                 vec3.fromValues(1, 0, 0));
 
             gl.uniformMatrix4fv(modelUnif, false, pineappleCF);
+            gl.uniformMatrix4fv(modelUnif, false, statueCF);
+            gl.uniformMatrix4fv(modelUnif, false, rockCF);
             gl.uniformMatrix4fv(modelUnif, false, ringCF);
 
             obj = new Pineapple(gl);
@@ -106,29 +116,46 @@ function keyboardHandler(event) {
     const transYneg = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, -1, 0));
     const transZpos = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, 1));
     const transZneg = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, -1));
-    switch (event.key) {
-        case "x":
-            mat4.multiply(ringCF, transXneg, ringCF);  // ringCF = Trans * ringCF
+    let objCF = mat4.create();
+
+    switch (currSelection) {
+        case 0:
+            currObjName = document.getElementById("house0").innerText;
+            objCF = pineappleCF;
             break;
-        case "X":
-            mat4.multiply(ringCF, transXpos, ringCF);  // ringCF = Trans * ringCF
+        case 1:
+            currObjName = document.getElementById("house1").innerText;
+            objCF = statueCF;
             break;
-        case "y":
-            mat4.multiply(ringCF, transYneg, ringCF);  // ringCF = Trans * ringCF
-            break;
-        case "Y":
-            mat4.multiply(ringCF, transYpos, ringCF);  // ringCF = Trans * ringCF
-            break;
-        case "z":
-            mat4.multiply(ringCF, transZneg, ringCF);  // ringCF = Trans * ringCF
-            break;
-        case "Z":
-            mat4.multiply(ringCF, transZpos, ringCF);  // ringCF = Trans * ringCF
+        case 2:
+            currObjName = document.getElementById("house2").innerText;
+            objCF = rockCF;
             break;
     }
-    textOut.innerHTML = "Ring origin (" + ringCF[12].toFixed(1) + ", "
-        + ringCF[13].toFixed(1) + ", "
-        + ringCF[14].toFixed(1) + ")";
+
+    switch (event.key) {
+        case "x":
+            mat4.multiply(objCF, transXneg, objCF);  // ringCF = Trans * ringCF
+            break;
+        case "X":
+            mat4.multiply(objCF, transXpos, objCF);  // ringCF = Trans * ringCF
+            break;
+        case "y":
+            mat4.multiply(objCF, transYneg, objCF);  // ringCF = Trans * ringCF
+            break;
+        case "Y":
+            mat4.multiply(objCF, transYpos, objCF);  // ringCF = Trans * ringCF
+            break;
+        case "z":
+            mat4.multiply(objCF, transZneg, objCF);  // ringCF = Trans * ringCF
+            break;
+        case "Z":
+            mat4.multiply(objCF, transZpos, objCF);  // ringCF = Trans * ringCF
+            break;
+    }
+    textOut.innerHTML = currObjName + " origin (" + objCF[12].toFixed(1) + ", "
+        + objCF[13].toFixed(1) + ", "
+        + objCF[14].toFixed(1) + ")";
 }
 
 function render() {
@@ -141,26 +168,27 @@ function render() {
 }
 
 function drawScene() {
+    let rowNum = document.getElementById("house-row").valueAsNumber;
+    let num = document.getElementById("house-number").valueAsNumber;
     globalAxes.draw(posAttr, colAttr, modelUnif, IDENTITY);
     obj.draw(posAttr, colAttr, modelUnif, tmpMat);
-    // obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
 
+    //Draw Multiple Pineapple Houses
     if (typeof obj !== 'undefined') {
-
-        var xPos = -2;
-        var yPos = -1.25;
+        var xPos;
+        var yPos;
         var x = 0.5;
-        for (let j = 0; j < 3; j++) {
+        for (let j = 0; j < rowNum; j++) {
             let row = j * x;
-            xPos = -2;
-            yPos = (-1.25) + row;
+            xPos = 0;
+            yPos = 1 + row;
 
-            for (let k = 0; k < 5; k++) {
+            for (let k = 0; k < num; k++) {
                 mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
                 mat4.multiply(tmpMat, pineappleCF, tmpMat);   // tmp = ringCF * tmpMat
                 obj.draw(posAttr, colAttr, modelUnif, tmpMat);
-                xPos += 0.5;
-                yPos += 0.5;
+                xPos -= 0.5;
+                yPos -= 0.5;
             }
         }
     }
@@ -180,4 +208,12 @@ function drawTopView() {
     gl.uniformMatrix4fv(viewUnif, false, topViewMat);
     gl.viewport(glCanvas.width / 2, 0, glCanvas.width / 2, glCanvas.height);
     drawScene();
+}
+
+function menuSelected(ev) {
+    let sel = ev.currentTarget.selectedIndex;
+   // paramGroup[currSelection].hidden = true;
+   // paramGroup[sel].hidden = false;
+    currSelection = sel;
+    console.log("New selection is ", currSelection);
 }
