@@ -116,6 +116,7 @@ function keyboardHandler(event) {
     const transYneg = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, -1, 0));
     const transZpos = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, 1));
     const transZneg = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, -1));
+
     let objCF = mat4.create();
 
     switch (currSelection) {
@@ -151,6 +152,18 @@ function keyboardHandler(event) {
             break;
         case "Z":
             mat4.multiply(objCF, transZpos, objCF);  // ringCF = Trans * ringCF
+            break;
+        case "l":
+            mat4.rotateX(objCF, objCF, - (Math.PI / 60));
+            break;
+        case "r":
+            mat4.rotateX(objCF, objCF, Math.PI / 60);
+            break;
+        case "u":
+            mat4.rotateY(objCF, objCF, - (Math.PI / 60));
+            break;
+        case "d":
+            mat4.rotateY(objCF, objCF, Math.PI / 60);
             break;
     }
     textOut.innerHTML = currObjName + " origin (" + objCF[12].toFixed(1) + ", "
