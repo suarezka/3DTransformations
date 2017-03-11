@@ -47,6 +47,7 @@ function main() {
             persProjMat = mat4.create();
             viewMat = mat4.create();
             topViewMat = mat4.create();
+            sideViewMat = mat4.create();
             ringCF = mat4.create();
             pineappleCF = mat4.create();
             tmpMat = mat4.create();
@@ -58,8 +59,12 @@ function main() {
             mat4.lookAt(topViewMat,
                 vec3.fromValues(0, 0, 2),
                 vec3.fromValues(0, 0, 0),
-                vec3.fromValues(0, 1, 0)
-            );
+                vec3.fromValues(0, 1, 0));
+            mat4.lookAt(sideViewMat,
+                vec3.fromValues(2, 2, 2),
+                vec3.fromValues(0, 0, 0),
+                vec3.fromValues(1, 0, 0));
+
             gl.uniformMatrix4fv(modelUnif, false, pineappleCF);
             gl.uniformMatrix4fv(modelUnif, false, ringCF);
 
@@ -164,7 +169,7 @@ function drawScene() {
 function draw3D() {
     /* We must update the projection and view matrices in the shader */
     gl.uniformMatrix4fv(projUnif, false, persProjMat);
-    gl.uniformMatrix4fv(viewUnif, false, viewMat)
+    gl.uniformMatrix4fv(viewUnif, false, viewMat);
     gl.viewport(0, 0, glCanvas.width / 2, glCanvas.height);
     drawScene();
 }
