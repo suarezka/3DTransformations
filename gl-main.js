@@ -117,7 +117,6 @@ function keyboardHandler(event) {
     const transZpos = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, 1));
     const transZneg = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, -1));
 
-  //  const scalePos = vec3.fromValues(0.5, 0, 0);
 
     let objCF = mat4.create();
 
@@ -167,9 +166,12 @@ function keyboardHandler(event) {
         case "d":
             mat4.rotateY(objCF, objCF, Math.PI / 60);
             break;
-      //  case "+":
-      //      mat4.scale(objCF, objCF, 0.5);
-      //      break;
+        case "+":
+            mat4.scale(objCF, objCF, vec3.fromValues(1.05, 1.05, 1.05));
+            break;
+        case "-":
+            mat4.scale(objCF, objCF, vec3.fromValues(0.75, 0.75, 0.75));
+            break;
     }
     textOut.innerHTML = currObjName + " origin (" + objCF[12].toFixed(1) + ", "
         + objCF[13].toFixed(1) + ", "
