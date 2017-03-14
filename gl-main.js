@@ -19,7 +19,7 @@ var projUnif, viewUnif, modelUnif;
 
 const IDENTITY = mat4.create();
 var coneSpinAngle;
-var obj, obj2;
+var obj, obj2, obj3, floor;
 var shaderProg;
 
 function main() {
@@ -37,7 +37,7 @@ function main() {
         .then(prog => {
             shaderProg = prog;
             gl.useProgram(prog);
-            gl.clearColor(0, 0, 0, 1);
+            gl.clearColor(0, 163/255, 230/255, 1);
             gl.enable(gl.DEPTH_TEST);
             /* enable hidden surface removal */
             //gl.enable(gl.CULL_FACE);     /* cull back facing polygons */
@@ -80,6 +80,8 @@ function main() {
 
             obj = new Pineapple(gl);
             obj2 = new SquidwardHouse(gl);
+            obj3 = new PatrickHouse(gl);
+            floor = new Floor(gl);
             globalAxes = new Axes(gl);
 
 
@@ -194,7 +196,7 @@ function keyboardHandler(event) {
 function render() {
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
     draw3D();
-    drawSideView();
+    drawTopView();
     /* looking at the XY plane, Z-axis points towards the viewer */
     //coneSpinAngle += 1;  /* add 1 degree */
     requestAnimationFrame(render);
@@ -203,9 +205,6 @@ function render() {
 function drawScene() {
     let rowNum = document.getElementById("house-row").valueAsNumber;
     let num = document.getElementById("house-number").valueAsNumber;
-    globalAxes.draw(posAttr, colAttr, modelUnif, IDENTITY);
-   // obj.draw(posAttr, colAttr, modelUnif, tmpMat);
-    obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
 
     //Draw Multiple Pineapple Houses
     if (typeof obj !== 'undefined') {
@@ -235,7 +234,7 @@ function drawScene() {
         for (let j = 0; j < rowNum; j++) {
             let row = j * x;
             xPos = 0;
-            yPos = -0.5 + row;
+            yPos = 0 + row;
 
             for (let k = 0; k < num; k++) {
                 mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
@@ -246,6 +245,27 @@ function drawScene() {
             }
         }
     }
+
+    //Draw Multiple Patrick Houses
+    if (typeof obj3 !== 'undefined') {
+        var xPos;
+        var yPos;
+        var x = 0.5;
+        for (let j = 0; j < rowNum; j++) {
+            let row = j * x;
+            xPos = 0;
+            yPos = -1 + row;
+
+            for (let k = 0; k < num; k++) {
+                mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
+                mat4.multiply(tmpMat, rockCF, tmpMat);   // tmp = ringCF * tmpMat
+                obj3.draw(posAttr, colAttr, modelUnif, tmpMat);
+                xPos -= 0.5;
+                yPos -= 0.5;
+            }
+        }
+    }
+    floor.draw(posAttr, colAttr, modelUnif, tmpMat);
 }
 
 function draw3D() {
