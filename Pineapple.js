@@ -57,7 +57,7 @@ class Pineapple {
         mat4.multiply(this.window1Transform, moveWindow, this.window1Transform);
 
         this.window2Transform = mat4.create();
-        mat4.rotateY(this.window2Transform, this.window2Transform, Math.PI / 3);
+        mat4.rotateY(this.window2Transform, this.window2Transform, - Math.PI / 2);
        // mat4.rotateZ(this.window2Transform, this.window2Transform, Math.PI);
         let moveWindow2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.18, 0.07, 0.04));
         mat4.multiply(this.window2Transform, moveWindow2, this.window2Transform);

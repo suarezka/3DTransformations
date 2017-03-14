@@ -84,7 +84,7 @@ function main() {
 
            // mat4.rotateX(pineappleCF, pineappleCF, Math.PI);
             mat4.rotateX(ringCF, ringCF, -Math.PI / 2);
-            coneSpinAngle = 0;
+            coneSpinAngle = 10;
             resizeHandler();
             render();
         });
@@ -117,6 +117,12 @@ function keyboardHandler(event) {
     const transZpos = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, 1));
     const transZneg = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, -1));
 
+    const rotateZccw = mat4.fromZRotation(mat4.create(), coneSpinAngle * Math.PI/180.0);
+    const rotateZcw = mat4.fromZRotation(mat4.create(), - (coneSpinAngle * Math.PI/180.0));
+    const rotateXccw = mat4.fromXRotation(mat4.create(), coneSpinAngle * Math.PI/180.0);
+    const rotateXcw = mat4.fromXRotation(mat4.create(), - (coneSpinAngle * Math.PI/180.0));
+    const rotateYccw = mat4.fromYRotation(mat4.create(), coneSpinAngle * Math.PI/180.0);
+    const rotateYcw = mat4.fromYRotation(mat4.create(), - (coneSpinAngle * Math.PI/180.0));
 
     let objCF = mat4.create();
 
@@ -155,16 +161,22 @@ function keyboardHandler(event) {
             mat4.multiply(objCF, transZpos, objCF);  // ringCF = Trans * ringCF
             break;
         case "l":
-            mat4.rotateX(objCF, objCF, - (Math.PI / 60));
+            mat4.multiply(objCF, objCF, rotateXccw);
             break;
         case "r":
-            mat4.rotateX(objCF, objCF, Math.PI / 60);
+            mat4.multiply(objCF, objCF, rotateXcw);
             break;
         case "u":
-            mat4.rotateY(objCF, objCF, - (Math.PI / 60));
+            mat4.multiply(objCF, objCF, rotateYcw);
             break;
         case "d":
-            mat4.rotateY(objCF, objCF, Math.PI / 60);
+            mat4.multiply(objCF, objCF, rotateYccw);
+            break;
+        case "c":
+            mat4.multiply(objCF, objCF, rotateZccw);
+            break;
+        case "C":
+            mat4.multiply(objCF, objCF, rotateZcw);
             break;
         case "+":
             mat4.scale(objCF, objCF, vec3.fromValues(1.05, 1.05, 1.05));
@@ -183,7 +195,7 @@ function render() {
     draw3D();
     drawTopView();
     /* looking at the XY plane, Z-axis points towards the viewer */
-    // coneSpinAngle += 1;  /* add 1 degree */
+    //coneSpinAngle += 1;  /* add 1 degree */
     requestAnimationFrame(render);
 }
 
