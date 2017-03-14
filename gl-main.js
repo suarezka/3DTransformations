@@ -4,7 +4,7 @@
 
 var gl;
 var glCanvas, textOut;
-var orthoProjMat, persProjMat, viewMat, topViewMat, ringCF;
+var orthoProjMat, persProjMat, viewMat, topViewMat, sideViewMat, ringCF;
 var pineappleCF, statueCF, rockCF;
 var axisBuff, tmpMat;
 var globalAxes;
@@ -69,16 +69,16 @@ function main() {
                 vec3.fromValues(0, 0, 0),
                 vec3.fromValues(0, 1, 0));
             mat4.lookAt(sideViewMat,
-                vec3.fromValues(2, 2, 2),
+                vec3.fromValues(2, 0, 0),
                 vec3.fromValues(0, 0, 0),
-                vec3.fromValues(1, 0, 0));
+                vec3.fromValues(0, 0, 1));
 
             gl.uniformMatrix4fv(modelUnif, false, pineappleCF);
             gl.uniformMatrix4fv(modelUnif, false, statueCF);
             gl.uniformMatrix4fv(modelUnif, false, rockCF);
             gl.uniformMatrix4fv(modelUnif, false, ringCF);
 
-            obj = new Pineapple(gl);
+            obj = new SquidwardHouse(gl);
             globalAxes = new Axes(gl);
 
 
@@ -193,7 +193,7 @@ function keyboardHandler(event) {
 function render() {
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
     draw3D();
-    drawTopView();
+    drawSideView();
     /* looking at the XY plane, Z-axis points towards the viewer */
     //coneSpinAngle += 1;  /* add 1 degree */
     requestAnimationFrame(render);
@@ -238,6 +238,14 @@ function drawTopView() {
     /* We must update the projection and view matrices in the shader */
     gl.uniformMatrix4fv(projUnif, false, orthoProjMat);
     gl.uniformMatrix4fv(viewUnif, false, topViewMat);
+    gl.viewport(glCanvas.width / 2, 0, glCanvas.width / 2, glCanvas.height);
+    drawScene();
+}
+
+function drawSideView() {
+    /* We must update the projection and view matrices in the shader */
+    gl.uniformMatrix4fv(projUnif, false, orthoProjMat);
+    gl.uniformMatrix4fv(viewUnif, false, sideViewMat);
     gl.viewport(glCanvas.width / 2, 0, glCanvas.width / 2, glCanvas.height);
     drawScene();
 }
