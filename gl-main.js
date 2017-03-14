@@ -5,7 +5,7 @@
 var gl;
 var glCanvas, textOut;
 var orthoProjMat, persProjMat, viewMat, topViewMat, sideViewMat, ringCF;
-var pineappleCF, statueCF, rockCF;
+var pineappleCF, statueCF, rockCF, floorCF;
 var axisBuff, tmpMat;
 var globalAxes;
 var currSelection = 0;
@@ -58,6 +58,7 @@ function main() {
             pineappleCF = mat4.create();
             statueCF = mat4.create();
             rockCF = mat4.create();
+            floorCF = mat4.create();
             tmpMat = mat4.create();
             mat4.lookAt(viewMat,
                 vec3.fromValues(2, 2, 2), /* eye */
@@ -206,6 +207,8 @@ function drawScene() {
     let rowNum = document.getElementById("house-row").valueAsNumber;
     let num = document.getElementById("house-number").valueAsNumber;
 
+    floor.draw(posAttr, colAttr, modelUnif, floorCF);
+
     //Draw Multiple Pineapple Houses
     if (typeof obj !== 'undefined') {
         var xPos;
@@ -214,7 +217,7 @@ function drawScene() {
         for (let j = 0; j < rowNum; j++) {
             let row = j * x;
             xPos = 0;
-            yPos = 1 + row;
+            yPos = 1.5 + row;
 
             for (let k = 0; k < num; k++) {
                 mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
@@ -254,7 +257,7 @@ function drawScene() {
         for (let j = 0; j < rowNum; j++) {
             let row = j * x;
             xPos = 0;
-            yPos = -1 + row;
+            yPos = -1.5 + row;
 
             for (let k = 0; k < num; k++) {
                 mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
@@ -265,7 +268,6 @@ function drawScene() {
             }
         }
     }
-    floor.draw(posAttr, colAttr, modelUnif, tmpMat);
 }
 
 function draw3D() {
