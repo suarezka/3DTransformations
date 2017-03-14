@@ -20,7 +20,7 @@ class Pineapple {
         let windowColor2 = vec3.fromValues(0.429412, 0.707843, 0.940392);
 
         // Door Color
-        let doorColor = vec3.fromValues(150.0/255, 109.0/255, 52.0/255);
+        let doorColor = vec3.fromValues(0.745098, 0.745098, 0.745098);
 
 
         this.base = new Cylinder(gl, 0.20, 0.15, 0.2, 16, baseColor, baseColor2);
@@ -32,16 +32,16 @@ class Pineapple {
         this.pipe2 = new Cylinder(gl, 0.05, 0.01, 0.1, 15, pipeColor, pipeColor);
         this.window1 = new Ring(gl, 0.05, 0.025, 0.1, 10, 4, windowColor, windowColor2);
         this.window2 = new Ring(gl, 0.05, 0.025, 0.1, 10, 4, windowColor, windowColor2);
-        this.door = new Cylinder(gl, 0.06, 0.06, 0.1, 10, doorColor, doorColor);
-        this.door2 = new Cube(gl, 0.12, 4, doorColor, doorColor, doorColor);
+        this.door = new Cylinder(gl, 0.06, 0.06, 0.1, 10, pipeColor, pipeColor);
+        this.door2 = new Cube(gl, 0.12, 4, pipeColor, pipeColor, pipeColor);
 
 
         //Repositioning for Base and Top
-        let moveBaseUp = vec3.fromValues(0, 0, 0.2);
+        let moveBaseUp = vec3.fromValues(0, 0, 0.1);
         this.baseTransform = mat4.create();
-        mat4.fromTranslation(th)
+        mat4.fromTranslation(this.baseTransform, moveBaseUp);
 
-        let moveUp = vec3.fromValues (0, 0, 0.2);
+        let moveUp = vec3.fromValues (0, 0, 0.3);
         this.topTransform = mat4.create();
         mat4.rotateY(this.topTransform, this.topTransform, Math.PI);
         let moveUpTop = mat4.fromTranslation(mat4.create(), moveUp);
@@ -49,83 +49,62 @@ class Pineapple {
         mat4.multiply (this.topTransform, moveUpTop, this.topTransform);
 
         //Side Pipe
-        let move = vec3.fromValues (0, 0.15, 0.24);
+        let move = vec3.fromValues (0, 0.15, 0.32);
         this.pipe1Transform = mat4.create();
         mat4.rotateX(this.pipe1Transform, this.pipe1Transform, Math.PI / 2);
         let moveSide = mat4.fromTranslation(mat4.create(), move);
         mat4.multiply(this.pipe1Transform, moveSide, this.pipe1Transform);
 
         this.pipe2Transform = mat4.create();
-        mat4.fromTranslation(this.pipe2Transform, vec3.fromValues(0, 0.23, 0.28));
+        mat4.fromTranslation(this.pipe2Transform, vec3.fromValues(0, 0.23, 0.36));
 
         // Windows
-        let moveWindow = vec3.fromValues(0.15, -0.07, 0.24);
+        let moveWindow = vec3.fromValues(0.13, -0.07, 0.28);
         this.windowTransform = mat4.create();
         mat4.rotateY(this.windowTransform, this.windowTransform, Math.PI/2);
         let moveUpWindow = mat4.fromTranslation(mat4.create(), moveWindow);
         mat4.multiply(this.windowTransform, moveUpWindow, this.windowTransform);
 
-        let moveWindow2 = vec3.fromValues(0.18, 0.07, 0.04);
+        let moveWindow2 = vec3.fromValues(0.13, 0.12, 0.15);
         this.window2Transform = mat4.create();
         mat4.rotateY(this.window2Transform, this.window2Transform, Math.PI/2);
         let moveUpWindow2 = mat4.fromTranslation(mat4.create(), moveWindow2);
         mat4.multiply(this.window2Transform, moveUpWindow2, this.window2Transform);
 
         // Door
-        let moveDoor = vec3.fromValues(0.2, 0, 0.14);
+        let moveDoor = vec3.fromValues(0.14, 0, 0.11);
         this.doorTransform = mat4.create();
         mat4.rotateY(this.doorTransform, this.doorTransform, Math.PI/2);
         let moveDoorUp = mat4.fromTranslation(mat4.create(), moveDoor);
         mat4.multiply(this.doorTransform, moveDoorUp, this.doorTransform);
 
-        let moveDoor2 = vec3.fromValues(0.19, 0, 0.07);
+        let moveDoor2 = vec3.fromValues(0.17, 0, 0.07);
         this.door2Transform = mat4.create();
-        mat4.scale(this.door2Transform, this.door2Transform, vec3.fromValues(1, 1, 1.2));
+        mat4.scale(this.door2Transform, this.door2Transform, vec3.fromValues(0.2, 1, 1));
         let moveDoorUp2 = mat4.fromTranslation(mat4.create(), moveDoor2);
         mat4.multiply(this.door2Transform, moveDoorUp2, this.door2Transform);
-/*
-        //Windows
-        this.window1Transform = mat4.create();
-        mat4.rotateY(this.window1Transform, this.window1Transform, Math.PI / 3);
-        let moveWindow = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.15, -0.07, 0.24));
-        mat4.multiply(this.window1Transform, moveWindow, this.window1Transform);
 
-        this.window2Transform = mat4.create();
-        mat4.rotateY(this.window2Transform, this.window2Transform, - Math.PI / 2);
-       // mat4.rotateZ(this.window2Transform, this.window2Transform, Math.PI);
-        let moveWindow2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.18, 0.07, 0.04));
-        mat4.multiply(this.window2Transform, moveWindow2, this.window2Transform);
-*/
         //Repositioning C1 of Cones
         this.c1Transform = mat4.create();
         mat4.rotateY(this.c1Transform, this.c1Transform, Math.PI);
-
-        let moveUp2 = vec3.fromValues(0, 0, 0.4);
+        let moveUp2 = vec3.fromValues(0, 0, 0.5);
         let moveUpC1 = mat4.fromTranslation(mat4.create(), moveUp2);
-
-        //crownTransform = moveUpCrown * crownTransform
         mat4.multiply (this.c1Transform, moveUpC1, this.c1Transform);
 
 
         //C2
         this.c2Transform = mat4.create();
         mat4.rotateY(this.c2Transform, this.c2Transform, Math.PI);
-
-        let moveUp3 = vec3.fromValues(0, 0, 0.5);
+        let moveUp3 = vec3.fromValues(0, 0, 0.6);
         let moveUpC2 = mat4.fromTranslation(mat4.create(), moveUp3);
-
-        //crownTransform = moveUpCrown * crownTransform
         mat4.multiply (this.c2Transform, moveUpC2, this.c2Transform);
 
 
         //C3
         this.c3Transform = mat4.create();
         mat4.rotateY(this.c3Transform, this.c3Transform, Math.PI);
-
-        let moveUp4 = vec3.fromValues(0, 0, 0.6);
+        let moveUp4 = vec3.fromValues(0, 0, 0.7);
         let moveUpC3 = mat4.fromTranslation(mat4.create(), moveUp4);
-
-        //crownTransform = moveUpCrown * crownTransform
         mat4.multiply (this.c3Transform, moveUpC3, this.c3Transform);
 
 

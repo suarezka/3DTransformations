@@ -227,7 +227,7 @@ function drawScene() {
         }
     }
 
-    //Draw Multiple Pineapple Houses
+    //Draw Multiple Squidward Houses
     if (typeof obj2 !== 'undefined') {
         var xPos;
         var yPos;
@@ -235,7 +235,7 @@ function drawScene() {
         for (let j = 0; j < rowNum; j++) {
             let row = j * x;
             xPos = 0;
-            yPos = 0 + row;
+            yPos = -0.5 + row;
 
             for (let k = 0; k < num; k++) {
                 mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
