@@ -17,6 +17,10 @@ class Pineapple {
         //Pipe Color
         let pipeColor = vec3.fromValues(0.117647, 0.564706, 1);
         let windowColor = vec3.fromValues(0.529412, 0.807843, 0.980392);
+        let windowColor2 = vec3.fromValues(0.429412, 0.707843, 0.940392);
+
+        // Door Color
+        let doorColor = vec3.fromValues(150.0/255, 109.0/255, 52.0/255);
 
 
         this.base = new Cylinder(gl, 0.20, 0.15, 0.2, 16, baseColor, baseColor2);
@@ -26,12 +30,16 @@ class Pineapple {
         this.c3 = new Cone(gl, 0.1, 0.2, 15, 1, crownColor, crownColor2);
         this.pipe1 = new Cylinder(gl, 0.01, 0.01, 0.2, 15, pipeColor, pipeColor);
         this.pipe2 = new Cylinder(gl, 0.05, 0.01, 0.1, 15, pipeColor, pipeColor);
-        this.window1 = new Torus(gl, 0.04, 0.02, 10, 10, pipeColor, windowColor);
-        this.window2 = new Torus(gl, 0.035, 0.02, 10, 10, pipeColor, windowColor);
+        this.window1 = new Ring(gl, 0.05, 0.025, 0.1, 10, 4, windowColor, windowColor2);
+        this.window2 = new Ring(gl, 0.05, 0.025, 0.1, 10, 4, windowColor, windowColor2);
+        this.door = new Cylinder(gl, 0.06, 0.06, 0.1, 10, doorColor, doorColor);
+        this.door2 = new Cube(gl, 0.12, 4, doorColor, doorColor, doorColor);
 
 
         //Repositioning for Base and Top
+        let moveBaseUp = vec3.fromValues(0, 0, 0.2);
         this.baseTransform = mat4.create();
+        mat4.fromTranslation(th)
 
         let moveUp = vec3.fromValues (0, 0, 0.2);
         this.topTransform = mat4.create();
@@ -50,6 +58,32 @@ class Pineapple {
         this.pipe2Transform = mat4.create();
         mat4.fromTranslation(this.pipe2Transform, vec3.fromValues(0, 0.23, 0.28));
 
+        // Windows
+        let moveWindow = vec3.fromValues(0.15, -0.07, 0.24);
+        this.windowTransform = mat4.create();
+        mat4.rotateY(this.windowTransform, this.windowTransform, Math.PI/2);
+        let moveUpWindow = mat4.fromTranslation(mat4.create(), moveWindow);
+        mat4.multiply(this.windowTransform, moveUpWindow, this.windowTransform);
+
+        let moveWindow2 = vec3.fromValues(0.18, 0.07, 0.04);
+        this.window2Transform = mat4.create();
+        mat4.rotateY(this.window2Transform, this.window2Transform, Math.PI/2);
+        let moveUpWindow2 = mat4.fromTranslation(mat4.create(), moveWindow2);
+        mat4.multiply(this.window2Transform, moveUpWindow2, this.window2Transform);
+
+        // Door
+        let moveDoor = vec3.fromValues(0.2, 0, 0.14);
+        this.doorTransform = mat4.create();
+        mat4.rotateY(this.doorTransform, this.doorTransform, Math.PI/2);
+        let moveDoorUp = mat4.fromTranslation(mat4.create(), moveDoor);
+        mat4.multiply(this.doorTransform, moveDoorUp, this.doorTransform);
+
+        let moveDoor2 = vec3.fromValues(0.19, 0, 0.07);
+        this.door2Transform = mat4.create();
+        mat4.scale(this.door2Transform, this.door2Transform, vec3.fromValues(1, 1, 1.2));
+        let moveDoorUp2 = mat4.fromTranslation(mat4.create(), moveDoor2);
+        mat4.multiply(this.door2Transform, moveDoorUp2, this.door2Transform);
+/*
         //Windows
         this.window1Transform = mat4.create();
         mat4.rotateY(this.window1Transform, this.window1Transform, Math.PI / 3);
@@ -61,7 +95,7 @@ class Pineapple {
        // mat4.rotateZ(this.window2Transform, this.window2Transform, Math.PI);
         let moveWindow2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0.18, 0.07, 0.04));
         mat4.multiply(this.window2Transform, moveWindow2, this.window2Transform);
-
+*/
         //Repositioning C1 of Cones
         this.c1Transform = mat4.create();
         mat4.rotateY(this.c1Transform, this.c1Transform, Math.PI);
@@ -113,11 +147,17 @@ class Pineapple {
         mat4.mul (this.tmp, coordFrame, this.pipe2Transform);
         this.pipe2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
-        mat4.mul (this.tmp, coordFrame, this.window1Transform);
+        mat4.mul (this.tmp, coordFrame, this.windowTransform);
         this.window1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.window2Transform);
         this.window2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
+
+        mat4.mul (this.tmp, coordFrame, this.doorTransform);
+        this.door.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
+
+        mat4.mul (this.tmp, coordFrame, this.door2Transform);
+        this.door2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.c1Transform);
         this.c1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);

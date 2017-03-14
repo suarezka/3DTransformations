@@ -19,7 +19,7 @@ var projUnif, viewUnif, modelUnif;
 
 const IDENTITY = mat4.create();
 var coneSpinAngle;
-var obj;
+var obj, obj2;
 var shaderProg;
 
 function main() {
@@ -78,7 +78,8 @@ function main() {
             gl.uniformMatrix4fv(modelUnif, false, rockCF);
             gl.uniformMatrix4fv(modelUnif, false, ringCF);
 
-            obj = new SquidwardHouse(gl);
+            obj = new Pineapple(gl);
+            obj2 = new SquidwardHouse(gl);
             globalAxes = new Axes(gl);
 
 
@@ -203,7 +204,8 @@ function drawScene() {
     let rowNum = document.getElementById("house-row").valueAsNumber;
     let num = document.getElementById("house-number").valueAsNumber;
     globalAxes.draw(posAttr, colAttr, modelUnif, IDENTITY);
-    obj.draw(posAttr, colAttr, modelUnif, tmpMat);
+   // obj.draw(posAttr, colAttr, modelUnif, tmpMat);
+    obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
 
     //Draw Multiple Pineapple Houses
     if (typeof obj !== 'undefined') {
@@ -219,6 +221,26 @@ function drawScene() {
                 mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
                 mat4.multiply(tmpMat, pineappleCF, tmpMat);   // tmp = ringCF * tmpMat
                 obj.draw(posAttr, colAttr, modelUnif, tmpMat);
+                xPos -= 0.5;
+                yPos -= 0.5;
+            }
+        }
+    }
+
+    //Draw Multiple Pineapple Houses
+    if (typeof obj2 !== 'undefined') {
+        var xPos;
+        var yPos;
+        var x = 0.5;
+        for (let j = 0; j < rowNum; j++) {
+            let row = j * x;
+            xPos = 0;
+            yPos = 0 + row;
+
+            for (let k = 0; k < num; k++) {
+                mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
+                mat4.multiply(tmpMat, statueCF, tmpMat);   // tmp = ringCF * tmpMat
+                obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
                 xPos -= 0.5;
                 yPos -= 0.5;
             }
